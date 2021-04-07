@@ -6,6 +6,7 @@ import com.pagrom.internship.services.MessageTemplateService
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
+import javax.persistence.EntityNotFoundException
 
 @Service
 class MessageTemplateServiceImpl(
@@ -24,7 +25,7 @@ class MessageTemplateServiceImpl(
         val messageTemplate = messageTemplateRepository.findById(templateId)
 
         if (!messageTemplate.isPresent) {
-            throw IllegalArgumentException("")
+            throw EntityNotFoundException("Message template not found")
         }
 
         return messageTemplate.get()

@@ -1,12 +1,14 @@
 package com.pagrom.internship.entities
 
+import kotlinx.serialization.Serializable
 import javax.persistence.Column
 import javax.persistence.ElementCollection
 import javax.persistence.Entity
 import javax.persistence.Id
 
+@Serializable
 @Entity
-class MessageTemplate(
+data class MessageTemplate(
     @Id
     @Column(nullable = false)
     val templateId: String = "",

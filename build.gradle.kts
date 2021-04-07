@@ -26,16 +26,11 @@ repositories {
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-//    implementation("org.springframework.boot:spring-boot-starter-jdbc")
-
-//    implementation("org.springframework.data:spring-data-relational")
-//    implementation("org.springframework.data:spring-data-jdbc")
 
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-//    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.1.0")
 
     compileOnly("org.projectlombok:lombok")
