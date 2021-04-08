@@ -1,6 +1,6 @@
 package com.pagrom.internship.repositories
 
-import com.pagrom.internship.entities.MessageTemplate
+import com.pagrom.internship.entities.Template
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
@@ -12,20 +12,20 @@ import org.springframework.data.domain.PageRequest
 import java.util.*
 
 @DataJpaTest
-class MessageTemplateRepositoryTest @Autowired constructor(
-    private val messageTemplateRepository: MessageTemplateRepository
+class TemplateRepositoryTest @Autowired constructor(
+    private val templateRepository: TemplateRepository
 ) {
-    private val messageTemplate1 = MessageTemplate(
+    private val messageTemplate1 = Template(
         "templateId1",
         "templateText1",
         emptyList()
     )
-    private val messageTemplate2 = MessageTemplate(
+    private val messageTemplate2 = Template(
         "templateId2",
         "templateText2",
         listOf("url")
     )
-    private val messageTemplate3 = MessageTemplate(
+    private val messageTemplate3 = Template(
         "templateId3",
         "templateText3",
         listOf("url1", "url2", "url3")
@@ -33,16 +33,16 @@ class MessageTemplateRepositoryTest @Autowired constructor(
 
     @BeforeEach
     fun setUp() {
-        messageTemplateRepository.save(messageTemplate1)
-        messageTemplateRepository.save(messageTemplate2)
-        messageTemplateRepository.save(messageTemplate3)
+        templateRepository.save(messageTemplate1)
+        templateRepository.save(messageTemplate2)
+        templateRepository.save(messageTemplate3)
     }
 
     @AfterEach
     fun tearDown() {
-        messageTemplateRepository.delete(messageTemplate1)
-        messageTemplateRepository.delete(messageTemplate2)
-        messageTemplateRepository.delete(messageTemplate3)
+        templateRepository.delete(messageTemplate1)
+        templateRepository.delete(messageTemplate2)
+        templateRepository.delete(messageTemplate3)
     }
 
     @Test
@@ -51,7 +51,7 @@ class MessageTemplateRepositoryTest @Autowired constructor(
         val expected = listOf(messageTemplate1, messageTemplate2, messageTemplate3)
 
         // Act
-        val templates: Page<MessageTemplate> = messageTemplateRepository.findAll(PageRequest.of(0, 10))
+        val templates: Page<Template> = templateRepository.findAll(PageRequest.of(0, 10))
 
         // Assert
         templates.content.zip(expected)
@@ -65,8 +65,8 @@ class MessageTemplateRepositoryTest @Autowired constructor(
     @Test
     fun `test find by id when entity does not exist`() {
         // Act
-        val emptyTemplate: Optional<MessageTemplate> = messageTemplateRepository.findById("incorrectId")
-        val template: Optional<MessageTemplate> = messageTemplateRepository.findById("templateId1")
+        val emptyTemplate: Optional<Template> = templateRepository.findById("incorrectId")
+        val template: Optional<Template> = templateRepository.findById("templateId1")
 
         // Assert
         assertThat(emptyTemplate.isEmpty).isTrue

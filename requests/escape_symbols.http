@@ -1,0 +1,24 @@
+### Create template with int validation
+POST http://localhost:8080/template/create/
+Content-Type: application/json
+
+{
+  "templateId": "internshipRequestEscapeSymbol",
+  "template": "Jetbrains Internship $$$$name$$$$.",
+  "recipients": [
+    "https://httpbin.org/"
+  ]
+}
+
+### Send template to urls
+POST http://localhost:8080/template/send/
+Content-Type: application/json
+
+{
+  "templateId": "internshipRequestEscapeSymbol",
+  "variables": [
+    {
+      "name": "hello"
+    }
+  ]
+}

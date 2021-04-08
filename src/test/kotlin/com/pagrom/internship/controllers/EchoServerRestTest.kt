@@ -18,9 +18,10 @@ import java.net.http.HttpResponse
 /**
  * Test REST API with {@link https://httpbin.org/#/HTTP_Methods}
  */
-class RestTest {
-    private val postUrl = "https://httpbin.org/post"
-    private val getUrl = "https://httpbin.org/get"
+class EchoServerRestTest {
+    private val url = "https://httpbin.org"
+    private val postUrl = "$url/post"
+    private val getUrl = "$url/get"
 
     /**
      * Test post request with echo server
