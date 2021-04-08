@@ -1,0 +1,59 @@
+### Create template with validation
+POST http://localhost:8080/template/create/
+Content-Type: application/json
+
+{
+  "templateId": "internshipRequestSubs",
+  "template": "Jetbrains Internship in $teamName$ team.",
+  "recipients": [
+    "https://httpbin.org/"
+  ],
+  "validation": [
+    {
+      "teamName": "string"
+    }
+  ]
+}
+
+### Try to substitute
+POST http://localhost:8080/template/send/
+Content-Type: application/json
+
+{
+  "templateId": "internshipRequestSubs",
+  "variables": [
+    {
+      "teamName": "Analytics Platform"
+    }
+  ]
+}
+
+### Create template with int validation
+POST http://localhost:8080/template/create/
+Content-Type: application/json
+
+{
+  "templateId": "internshipRequestSubsInt",
+  "template": "Jetbrains Internship $year$.",
+  "recipients": [
+    "https://httpbin.org/"
+  ],
+  "validation": [
+    {
+      "year": "int"
+    }
+  ]
+}
+
+### Try to substitute int type
+POST http://localhost:8080/template/send/
+Content-Type: application/json
+
+{
+  "templateId": "internshipRequestSubsInt",
+  "variables": [
+    {
+      "year": "1"
+    }
+  ]
+}

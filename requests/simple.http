@@ -1,0 +1,183 @@
+### Create template
+POST http://localhost:8080/template/create/
+Content-Type: application/json
+
+{
+  "templateId": "internshipRequest",
+  "template": "Jetbrains Internship in $teamName$ team.",
+  "recipients": [
+    "http://some.server.url/endpoint",
+    "http://some.other.url/endpoint"
+  ]
+}
+
+### Create template with httpbin url
+POST http://localhost:8080/template/create/
+Content-Type: application/json
+
+{
+  "templateId": "internshipRequest",
+  "template": "Jetbrains Internship in $teamName$ team.",
+  "recipients": [
+    "https://httpbin.org/"
+  ]
+}
+
+### Get templates
+GET http://localhost:8080/template/list
+
+### Send template to urls
+POST http://localhost:8080/template/send/
+Content-Type: application/json
+
+{
+  "templateId": "internshipRequest",
+  "variables": [
+    {
+      "teamName": "Analytics Platform"
+    }
+  ]
+}
+
+### Send template with error value
+POST http://localhost:8080/template/send/
+Content-Type: application/json
+
+{
+  "templateId": "internshipRequest",
+  "variables": [
+    {
+      "value": "errorValue"
+    }
+  ]
+}
+
+### Send template with error id
+POST http://localhost:8080/template/send/
+Content-Type: application/json
+
+{
+  "templateId": "incorrectId",
+  "variables": [
+    {
+      "teamName": "Analytics Platform"
+    }
+  ]
+}
+
+
+### Create template with httpbin url
+POST http://localhost:8080/template/create/
+Content-Type: application/json
+
+{
+  "templateId": "internshipRequestSubs",
+  "template": "Jetbrains Internship in $teamName$ team.",
+  "recipients": [
+    "https://httpbin.org/"
+  ],
+  "validation": [
+    {
+      "teamName": "string"
+    }
+  ]
+}
+
+### Send template to urls
+POST http://localhost:8080/template/send/
+Content-Type: application/json
+
+{
+  "templateId": "internshipRequestSubs",
+  "variables": [
+    {
+      "teamName": "Analytics Platform"
+    }
+  ]
+}
+
+### Create template with httpbin url
+POST http://localhost:8080/template/create/
+Content-Type: application/json
+
+{
+  "templateId": "internshipRequestSubsInt",
+  "template": "Jetbrains Internship $year$.",
+  "recipients": [
+    "https://httpbin.org/"
+  ],
+  "validation": [
+    {
+      "year": "int"
+    }
+  ]
+}
+
+### Send template to urls
+POST http://localhost:8080/template/send/
+Content-Type: application/json
+
+{
+  "templateId": "internshipRequestSubsInt",
+  "variables": [
+    {
+      "year": "1"
+    }
+  ]
+}
+
+### Create template with httpbin url
+POST http://localhost:8080/template/create/
+Content-Type: application/json
+
+{
+  "templateId": "internshipRequestEscapeSymbol",
+  "template": "Jetbrains Internship $$$$name$$$$.",
+  "recipients": [
+    "https://httpbin.org/"
+  ]
+}
+
+### Send template to urls
+POST http://localhost:8080/template/send/
+Content-Type: application/json
+
+{
+  "templateId": "internshipRequestEscapeSymbol",
+  "variables": [
+    {
+      "name": "hello"
+    }
+  ]
+}
+
+### Create template with httpbin url
+POST http://localhost:8080/template/create/
+Content-Type: application/json
+
+{
+  "templateId": "internshipRequestMultiple",
+  "template": "Jetbrains Internship $year$, $team$.",
+  "recipients": [
+    "https://httpbin.org/"
+  ],
+  "validation": [
+    {
+      "team": "int"
+    }
+  ]
+}
+
+### Send template to urls
+POST http://localhost:8080/template/send/
+Content-Type: application/json
+
+{
+  "templateId": "internshipRequestMultiple",
+  "variables": [
+    {
+      "year": "1",
+      "team": "hello"
+    }
+  ]
+}
