@@ -52,7 +52,7 @@ class EchoServerRestTest {
         val stringData = Json.decodeFromJsonElement<String>(data)
         val echoMessage = Json.decodeFromString<Message>(stringData)
 
-        assertThat(echoMessage).isEqualTo("")
+        assertThat(echoMessage).isEqualTo(message)
     }
 
     /**

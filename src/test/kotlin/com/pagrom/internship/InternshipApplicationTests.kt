@@ -8,11 +8,5 @@ class InternshipApplicationTests {
 
     @Test
     fun contextLoads() {
-        val name = "asd"
-        println(Regex.escapeReplacement("$$name$"))
-        println("$$name$")
-
-        println(Regex.escapeReplacement("$$$"))
-        println("$$$")
     }
 }
