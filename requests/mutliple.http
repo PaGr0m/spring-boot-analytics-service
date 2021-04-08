@@ -1,0 +1,72 @@
+### Create template
+POST http://localhost:8080/template/create/
+Content-Type: application/json
+
+{
+  "templateId": "internshipRequest",
+  "template": "Jetbrains Internship in $teamName$ team.",
+  "recipients": [
+    "http://some.server.url/endpoint",
+    "http://some.other.url/endpoint"
+  ]
+}
+
+> {%
+    client.test("Request executed successfully", function() {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+%}
+
+### Create template with httpbin url
+POST http://localhost:8080/template/create/
+Content-Type: application/json
+
+{
+  "templateId": "internshipRequest",
+  "template": "Jetbrains Internship in $teamName$ team.",
+  "recipients": [
+    "https://httpbin.org/"
+  ]
+}
+
+### Get templates
+GET http://localhost:8080/template/list
+
+### Send template to urls
+POST http://localhost:8080/template/send/
+Content-Type: application/json
+
+{
+  "templateId": "internshipRequest",
+  "variables": [
+    {
+      "teamName": "Analytics Platform"
+    }
+  ]
+}
+
+### Send template with error value
+POST http://localhost:8080/template/send/
+Content-Type: application/json
+
+{
+  "templateId": "internshipRequest",
+  "variables": [
+    {
+      "value": "errorValue"
+    }
+  ]
+}
+
+### Send template with error id
+POST http://localhost:8080/template/send/
+Content-Type: application/json
+
+{
+  "templateId": "incorrectId",
+  "variables": [
+    {
+      "teamName": "Analytics Platform"
+    }
+  ]
+}

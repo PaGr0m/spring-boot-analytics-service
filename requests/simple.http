@@ -64,3 +64,120 @@ Content-Type: application/json
     }
   ]
 }
+
+
+### Create template with httpbin url
+POST http://localhost:8080/template/create/
+Content-Type: application/json
+
+{
+  "templateId": "internshipRequestSubs",
+  "template": "Jetbrains Internship in $teamName$ team.",
+  "recipients": [
+    "https://httpbin.org/"
+  ],
+  "validation": [
+    {
+      "teamName": "string"
+    }
+  ]
+}
+
+### Send template to urls
+POST http://localhost:8080/template/send/
+Content-Type: application/json
+
+{
+  "templateId": "internshipRequestSubs",
+  "variables": [
+    {
+      "teamName": "Analytics Platform"
+    }
+  ]
+}
+
+### Create template with httpbin url
+POST http://localhost:8080/template/create/
+Content-Type: application/json
+
+{
+  "templateId": "internshipRequestSubsInt",
+  "template": "Jetbrains Internship $year$.",
+  "recipients": [
+    "https://httpbin.org/"
+  ],
+  "validation": [
+    {
+      "year": "int"
+    }
+  ]
+}
+
+### Send template to urls
+POST http://localhost:8080/template/send/
+Content-Type: application/json
+
+{
+  "templateId": "internshipRequestSubsInt",
+  "variables": [
+    {
+      "year": "1"
+    }
+  ]
+}
+
+### Create template with httpbin url
+POST http://localhost:8080/template/create/
+Content-Type: application/json
+
+{
+  "templateId": "internshipRequestEscapeSymbol",
+  "template": "Jetbrains Internship $$$$name$$$$.",
+  "recipients": [
+    "https://httpbin.org/"
+  ]
+}
+
+### Send template to urls
+POST http://localhost:8080/template/send/
+Content-Type: application/json
+
+{
+  "templateId": "internshipRequestEscapeSymbol",
+  "variables": [
+    {
+      "name": "hello"
+    }
+  ]
+}
+
+### Create template with httpbin url
+POST http://localhost:8080/template/create/
+Content-Type: application/json
+
+{
+  "templateId": "internshipRequestMultiple",
+  "template": "Jetbrains Internship $year$, $team$.",
+  "recipients": [
+    "https://httpbin.org/"
+  ],
+  "validation": [
+    {
+      "team": "int"
+    }
+  ]
+}
+
+### Send template to urls
+POST http://localhost:8080/template/send/
+Content-Type: application/json
+
+{
+  "templateId": "internshipRequestMultiple",
+  "variables": [
+    {
+      "year": "1",
+      "team": "hello"
+    }
+  ]
+}
