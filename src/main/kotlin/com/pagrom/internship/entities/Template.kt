@@ -8,7 +8,7 @@ import javax.persistence.Id
 
 @Serializable
 @Entity
-data class MessageTemplate(
+data class Template(
     @Id
     @Column(nullable = false)
     val templateId: String = "",
@@ -18,5 +18,9 @@ data class MessageTemplate(
 
     @ElementCollection
     @Column(nullable = false)
-    val recipients: List<String> = mutableListOf()
+    val recipients: List<String> = mutableListOf(),
+
+    @ElementCollection
+    @Column(nullable = false)
+    val validation: Map<String, String> = mutableMapOf(),
 )
