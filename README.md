@@ -1,7 +1,11 @@
 # Simple RESTful Spring application
 
-This Simple Spring Boot RESTful application using to save incoming Templates and send a substituted template on others
-urls. H2 used as database, java.net.http as HttpClient.
+This applicaction allows you to manage templates. You can use variables in templates and then with additional request
+substitute to actual values. Finally, using this app you can send resulting text to specified URLs.
+
+[H2](https://www.h2database.com/html/main.html) is used as a database,
+[java.net.http](https://docs.oracle.com/en/java/javase/11/docs/api/java.net.http/java/net/http/package-summary.html)
+as HttpClient.
 
 ## Usage
 
@@ -52,4 +56,4 @@ Application have several endpoints:
 }
 ```
 
-To see more [examples](https://github.com/PaGr0m/spring-boot-analytics-service/tree/main/requests)
+[Click to see more examples!](https://github.com/PaGr0m/spring-boot-analytics-service/tree/main/requests)
