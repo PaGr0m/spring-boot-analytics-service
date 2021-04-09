@@ -176,7 +176,9 @@ Content-Type: application/json
   "templateId": "internshipRequestMultiple",
   "variables": [
     {
-      "year": "1",
+      "year": "1"
+    },
+    {
       "team": "hello"
     }
   ]
