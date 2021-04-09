@@ -2,6 +2,7 @@ package com.pagrom.internship.services.impl
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.pagrom.internship.entities.Message
+import com.pagrom.internship.exceptions.SubstitutionException
 import com.pagrom.internship.services.SenderService
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
@@ -35,7 +36,7 @@ class HttpSenderService : SenderService {
                 substitutionTemplate = if (validations.containsKey(varName)) {
                     val type = validations[varName]!!
                     if (!validate(type, varValue)) {
-                        throw IllegalArgumentException("Substitution type error [$varName : $type = \"$varValue\"]")
+                        throw SubstitutionException("Substitution type error [$varName : $type = \"$varValue\"]")
                     }
                     substitutionTemplate.replace("$$varName$", varValue)
                 } else {

@@ -1,6 +1,7 @@
 package com.pagrom.internship.services.impl
 
 import com.pagrom.internship.entities.Template
+import com.pagrom.internship.entities.TemplateDTO
 import com.pagrom.internship.repositories.TemplateRepository
 import com.pagrom.internship.services.TemplateService
 import org.assertj.core.api.Assertions.assertThat
@@ -16,21 +17,21 @@ import org.mockito.Mockito.`when` as mockitoWhen
 
 
 internal class TemplateServiceImplTest {
-
     private val templateRepository: TemplateRepository = mock(TemplateRepository::class.java)
     private val templateService: TemplateService = TemplateServiceImpl(templateRepository)
 
     @Test
     fun `test create single messageTemplate`() {
         // Arrange
+        val templateDTO = TemplateDTO("", "", emptyList())
         val messageTemplate = Template("", "", emptyList())
         mockitoWhen(templateRepository.save(messageTemplate)).thenReturn(messageTemplate)
 
         // Act
-//        val actual = messageTemplateService.create(messageTemplate)
+        val actual = templateService.create(templateDTO)
 
         // Assert
-//        assertThat(actual).isEqualTo(messageTemplate)
+        assertThat(actual).isEqualTo(messageTemplate)
     }
 
     @Test

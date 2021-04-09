@@ -4,6 +4,7 @@ import com.pagrom.internship.entities.Message
 import com.pagrom.internship.entities.Template
 import com.pagrom.internship.entities.TemplateDTO
 import com.pagrom.internship.entities.TemplateSubstitution
+import com.pagrom.internship.exceptions.SubstitutionException
 import com.pagrom.internship.services.TemplateService
 import com.pagrom.internship.services.impl.HttpSenderService
 import org.springframework.data.domain.Page
@@ -42,7 +43,7 @@ class TemplateController(
             ResponseEntity.status(HttpStatus.OK).body(message)
         } catch (e: EntityNotFoundException) {
             ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Message(e.message!!))
-        } catch (e: IllegalArgumentException) {
+        } catch (e: SubstitutionException) {
             ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Message(e.message!!))
         }
     }
