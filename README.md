@@ -9,7 +9,6 @@ as HttpClient.
 
 ## Usage
 
----
 To run spring application (only with Java11+)
 
 ```shell
@@ -17,8 +16,6 @@ $ ./gradlew bootRun
 ```
 
 ## Urls
-
----
 
 Application have several endpoints:
 
