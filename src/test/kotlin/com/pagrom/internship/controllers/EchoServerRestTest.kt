@@ -2,8 +2,10 @@ package com.pagrom.internship.controllers
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.pagrom.internship.entities.Message
+import com.pagrom.internship.entities.TemplateDTO
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.decodeFromJsonElement
 import kotlinx.serialization.json.jsonObject
 import org.assertj.core.api.Assertions.assertThat
@@ -73,5 +75,33 @@ class EchoServerRestTest {
 
         assertThat(response.uri().toString()).isEqualTo(getUrl)
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value())
+    }
+
+    @Test
+    fun `test create template`() {
+        val templateDTO = TemplateDTO("templateId1", "Template \$text\$", listOf("url1", "url2"))
+
+        val objectMapper = ObjectMapper()
+        val requestBody: String = objectMapper.writeValueAsString(templateDTO)
+        val client = HttpClient.newBuilder().build()
+
+        val request = HttpRequest.newBuilder()
+            .uri(URI.create(postUrl))
+            .POST(HttpRequest.BodyPublishers.ofString(requestBody))
+            .build()
+        val response = client.send(request, HttpResponse.BodyHandlers.ofString())
+
+        assertThat(request.uri().toString()).isEqualTo(postUrl)
+        assertThat(request.method()).isEqualTo(HttpMethod.POST.toString())
+
+        assertThat(response.uri().toString()).isEqualTo(postUrl)
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value())
+
+        val data: JsonElement? = Json.parseToJsonElement(response.body()).jsonObject["data"]
+        assertThat(data!!).isNotNull
+
+        val stringData = Json.decodeFromJsonElement<String>(data)
+        val actualTemplateDTO = Json.decodeFromString<TemplateDTO>(stringData)
+        assertThat(actualTemplateDTO).isEqualTo(templateDTO)
     }
 }

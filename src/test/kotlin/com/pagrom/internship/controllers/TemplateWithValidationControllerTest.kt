@@ -20,35 +20,30 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 
 @SpringBootTest
 @AutoConfigureMockMvc
-class TemplateControllerTest {
+class TemplateWithValidationControllerTest {
     @Autowired
     private lateinit var mockMvc: MockMvc
 
-    private var expectedTemplate = Template(
-        "templateId1",
-        "Hello, \$year\$ year!",
+    private val templateWithValidationDTO = TemplateDTO(
+        "templateIdWithValidation1",
+        "1. \$name\$" +
+        "2. \$year\$" +
+        "3. \$number\$",
         listOf("https://httpbin.org/post"),
-        emptyMap()
-    )
-
-    private val templateDTO = TemplateDTO(
-        "templateId1",
-        "Hello, \$year\$ year!",
-        listOf("https://httpbin.org/post")
+        listOf(
+            mapOf(
+                "name" to "string",
+                "year" to "int",
+            ),
+            mapOf(
+                "number" to "double"
+            )
+        )
     )
 
     @Test
-    fun `test api template-list`() {
-        val mvcResult: MvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/template/list"))
-            .andExpect(MockMvcResultMatchers.status().isOk)
-            .andReturn()
-
-        assertThat(mvcResult.request.contentAsString).isNull()
-    }
-
-    @Test
-    fun `test api template-create`() {
-        val body = Json.encodeToJsonElement(templateDTO).toString()
+    fun `test create template with validation`() {
+        val body = Json.encodeToJsonElement(templateWithValidationDTO).toString()
 
         val request = MockMvcRequestBuilders.post("/template/create")
             .contentType(MediaType.APPLICATION_JSON)
@@ -60,15 +55,35 @@ class TemplateControllerTest {
             .andExpect(MockMvcResultMatchers.status().isOk)
             .andReturn()
 
+        val template = Template(
+            "templateIdWithValidation1",
+            "1. \$name\$" +
+            "2. \$year\$" +
+            "3. \$number\$",
+            listOf("https://httpbin.org/post"),
+            mapOf(
+                "name" to "string",
+                "year" to "int",
+                "number" to "double"
+            )
+        )
+
         assertThat(mvcResult.request.contentAsString).isEqualTo(body)
-        assertThat(mvcResult.response.contentAsString).isEqualTo(body)
+        assertThat(Json.decodeFromString<Template>(mvcResult.response.contentAsString)).isEqualTo(template)
     }
 
     @Test
-    fun `test substitution and send template`() {
-        `test api template-create`()
+    fun `test substitution and send template with validation`() {
+        `test create template with validation`()
 
-        val messageSender = TemplateSubstitution("templateId1", listOf(mapOf("year" to "2021")))
+        val messageSender = TemplateSubstitution(
+            "templateIdWithValidation1",
+            listOf(
+                mapOf("name" to "someString"),
+                mapOf("year" to "2021"),
+                mapOf("number" to "3.14"),
+            )
+        )
         val body = Json.encodeToJsonElement(messageSender).toString()
 
         val request = MockMvcRequestBuilders.post("/template/send")
@@ -80,16 +95,26 @@ class TemplateControllerTest {
             .andExpect(MockMvcResultMatchers.status().isOk)
             .andReturn()
 
-        val message = Message("Hello, 2021 year!")
+        val message = Message(
+            "1. someString" +
+            "2. 2021" +
+            "3. 3.14"
+        )
+
         assertThat(mvcResult.request.contentAsString).isEqualTo(body)
         assertThat(Json.decodeFromString<Message>(mvcResult.response.contentAsString)).isEqualTo(message)
     }
 
     @Test
-    fun `test substitution exception`() {
-        `test api template-create`()
+    fun `test send template with validation error`() {
+        `test create template with validation`()
 
-        val messageSender = TemplateSubstitution("incorrectId", listOf(mapOf("year" to "2021")))
+        val messageSender = TemplateSubstitution(
+            "templateIdWithValidation1",
+            listOf(
+                mapOf("year" to "someInt"),
+            )
+        )
         val body = Json.encodeToJsonElement(messageSender).toString()
 
         val request = MockMvcRequestBuilders.post("/template/send")
@@ -101,29 +126,9 @@ class TemplateControllerTest {
             .andExpect(MockMvcResultMatchers.status().isBadRequest)
             .andReturn()
 
+        val errorMessage = Message("Substitution type error [year : int = \"someInt\"]")
+
         assertThat(mvcResult.request.contentAsString).isEqualTo(body)
-        assertThat(Json.decodeFromString<Message>(mvcResult.response.contentAsString))
-            .isEqualTo(Message("Template not found"))
-    }
-
-    @Test
-    fun `test substitution without value`() {
-        `test api template-create`()
-
-        val messageSender = TemplateSubstitution("templateId1", listOf(mapOf("incorrectValue" to "2021")))
-        val body = Json.encodeToJsonElement(messageSender).toString()
-
-        val request = MockMvcRequestBuilders.post("/template/send")
-            .contentType(MediaType.APPLICATION_JSON)
-            .accept(MediaType.APPLICATION_JSON)
-            .content(body)
-
-        val mvcResult: MvcResult = mockMvc.perform(request)
-            .andExpect(MockMvcResultMatchers.status().isOk)
-            .andReturn()
-
-        val message = Message(templateDTO.template)
-        assertThat(mvcResult.request.contentAsString).isEqualTo(body)
-        assertThat(Json.decodeFromString<Message>(mvcResult.response.contentAsString)).isEqualTo(message)
+        assertThat(Json.decodeFromString<Message>(mvcResult.response.contentAsString)).isEqualTo(errorMessage)
     }
 }
