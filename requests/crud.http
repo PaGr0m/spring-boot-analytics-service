@@ -1,0 +1,64 @@
+### Create template
+POST http://localhost:8080/template/create/
+Content-Type: application/json
+
+{
+  "templateId": "template1",
+  "template": "Template name",
+  "recipients": [
+    "http://some.server.url/endpoint",
+    "http://some.other.url/endpoint"
+  ]
+}
+
+### Get template
+GET http://localhost:8080/template/template1
+Content-Type: application/json
+
+{
+  "templateId": "template1",
+  "template": "Template name",
+  "recipients": [
+    "http://some.server.url/endpoint",
+    "http://some.other.url/endpoint"
+  ]
+}
+
+### Update template
+POST http://localhost:8080/template/template1/update
+Content-Type: application/json
+
+{
+  "templateId": "template1",
+  "template": "New template name",
+  "recipients": [
+    "http://some2.server.url/endpoint"
+  ]
+}
+
+### Update a non-existent template
+PUT http://localhost:8080/template/template1/update
+Content-Type: application/json
+
+{
+  "templateId": "template2",
+  "template": "New template name",
+  "recipients": [
+    "http://some2.server.url/endpoint"
+  ]
+}
+
+### Delete a non-existent template
+DELETE http://localhost:8080/template/template2/delete
+Content-Type: application/json
+
+{
+  "templateId": "template2",
+  "template": "New template name",
+  "recipients": [
+    "http://some2.server.url/endpoint"
+  ]
+}
+
+### Delete template
+GET http://localhost:8080/template/template1/delete
