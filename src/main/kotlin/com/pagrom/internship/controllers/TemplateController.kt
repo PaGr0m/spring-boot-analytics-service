@@ -11,10 +11,8 @@ import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
+import java.net.ConnectException
 import javax.persistence.EntityNotFoundException
 
 @RestController
@@ -23,8 +21,42 @@ class TemplateController(
     val httpServiceService: HttpSenderService
 ) {
     @PostMapping("/template/create")
-    fun loadTemplate(@RequestBody templateDTO: TemplateDTO): Template {
+    fun createTemplate(@RequestBody templateDTO: TemplateDTO): Template {
         return templateService.create(templateDTO)
+    }
+
+    @GetMapping("/template/{id}")
+    fun getTemplate(@PathVariable("id") templateId: String): ResponseEntity<Template> {
+        return try {
+            ResponseEntity.status(HttpStatus.OK).body(templateService.findByTemplateId(templateId))
+        } catch (e: EntityNotFoundException) {
+            ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Template())
+        }
+    }
+
+    @PutMapping("/template/{id}/update")
+    fun updateTemplate(
+        @PathVariable("id") templateId: String,
+        @RequestBody templateDTO: TemplateDTO
+    ): ResponseEntity<Template> {
+        return try {
+            if (templateDTO.templateId != templateId) {
+                ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Template())
+            }
+
+            ResponseEntity.status(HttpStatus.OK).body(templateService.update(templateDTO))
+        } catch (e: EntityNotFoundException) {
+            ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Template())
+        }
+    }
+
+    @GetMapping("/template/{id}/delete")
+    fun deleteTemplate(@PathVariable("id") templateId: String): ResponseEntity<Boolean> {
+        return try {
+            ResponseEntity.status(HttpStatus.OK).body(templateService.delete(templateId))
+        } catch (e: EntityNotFoundException) {
+            ResponseEntity.status(HttpStatus.BAD_REQUEST).body(false)
+        }
     }
 
     @PostMapping("/template/send")
@@ -45,6 +77,8 @@ class TemplateController(
             ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Message(e.message!!))
         } catch (e: SubstitutionException) {
             ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Message(e.message!!))
+        } catch (e: ConnectException) {
+            ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(Message("It's impossible to reach the address!"))
         }
     }
 

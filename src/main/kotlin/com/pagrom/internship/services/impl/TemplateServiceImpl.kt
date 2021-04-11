@@ -21,6 +21,46 @@ class TemplateServiceImpl(
             return templateOptional.get()
         }
 
+        return saveTemplate(templateDTO)
+    }
+
+    override fun list(pageable: Pageable): Page<Template> {
+        return templateRepository.findAll(pageable)
+    }
+
+    override fun findByTemplateId(templateId: String): Template {
+        val template = templateRepository.findById(templateId)
+
+        if (template.isEmpty) {
+            throw EntityNotFoundException("Template not found")
+        }
+
+        return template.get()
+    }
+
+    override fun update(templateDTO: TemplateDTO): Template {
+        val template = templateRepository.findById(templateDTO.templateId)
+
+        if (template.isEmpty) {
+            throw EntityNotFoundException("Template not found")
+        }
+
+        return saveTemplate(templateDTO)
+    }
+
+    override fun delete(templateId: String): Boolean {
+        val template = templateRepository.findById(templateId)
+
+        if (template.isEmpty) {
+            throw EntityNotFoundException("Template not found")
+        }
+
+        templateRepository.delete(template.get())
+
+        return true
+    }
+
+    private fun saveTemplate(templateDTO: TemplateDTO): Template {
         // Create new template
         val validation: MutableMap<String, String> = mutableMapOf()
         if (templateDTO.validation != null) {
@@ -39,19 +79,5 @@ class TemplateServiceImpl(
         )
 
         return templateRepository.save(template)
-    }
-
-    override fun list(pageable: Pageable): Page<Template> {
-        return templateRepository.findAll(pageable)
-    }
-
-    override fun findByTemplateId(templateId: String): Template {
-        val messageTemplate = templateRepository.findById(templateId)
-
-        if (!messageTemplate.isPresent) {
-            throw EntityNotFoundException("Template not found")
-        }
-
-        return messageTemplate.get()
     }
 }

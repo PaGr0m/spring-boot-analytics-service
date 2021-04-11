@@ -11,4 +11,8 @@ interface TemplateService {
     fun list(pageable: Pageable): Page<Template>
 
     fun findByTemplateId(templateId: String): Template
+
+    fun update(templateDTO: TemplateDTO): Template
+
+    fun delete(templateId: String): Boolean
 }
